@@ -54,7 +54,7 @@ displayAllData()
           console.log(res.id)
           getItemByID(id);
         //   console.log(`You want to buy ${res.product_name}`);
-        //   askCustomerQuanitiy(res.item_id);
+         askCustomerQuanitiy(id);
 
       })
   }
@@ -74,5 +74,8 @@ displayAllData()
           }
 
           }
-      ])
+      ]).then((res) => {
+          //log how many you bought
+          //update the db with new quanitity
+      })
   }
