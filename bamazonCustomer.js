@@ -21,9 +21,11 @@ var connection = mysql.createConnection({
       connection.query("SELECT * FROM bamazon_db.products;", function(err, res) {
           if(err) throw err;
           console.table(res);
+          askCustomerID();
       })
   }
-displayAllData()
+
+//displayAllData()
   function getItemByID(id){
       connection.query("SELECT product_name FROM bamazon_db.products WHERE item_id = " + id, function(err, res) {
           if(err) throw err;
@@ -34,8 +36,9 @@ displayAllData()
   }
 
   //displayAllData();
-  askCustomerID();
+  //askCustomerID();
   function askCustomerID() {
+      
       inquirer.prompt([
           {
               type: "input",
@@ -48,6 +51,7 @@ displayAllData()
                 return false;
               }
           }
+        
       ])
       .then((res) => {
           var id = res.id;
@@ -79,3 +83,10 @@ displayAllData()
           //update the db with new quanitity
       })
   }
+
+  function runBamazonCustomer(){
+    displayAllData();
+    
+
+  }
+  runBamazonCustomer()
