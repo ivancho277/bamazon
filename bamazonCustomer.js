@@ -25,7 +25,14 @@ var connection = mysql.createConnection({
       })
   }
 
-//displayAllData()
+  function updateDataBase(id, quanitity){
+      connection.query("UPDATE ? FROM bamazon_db.products WHERE ?", {
+          stock_quantity: quanitity,
+          item_id: id
+      }), function(err, res) {
+          console.table(res);
+      }
+  }
   function getItemByID(id){
       connection.query("SELECT product_name FROM bamazon_db.products WHERE item_id = " + id, function(err, res) {
           if(err) throw err;
