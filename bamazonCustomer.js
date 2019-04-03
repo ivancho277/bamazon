@@ -16,7 +16,6 @@ var connection = mysql.createConnection({
     database: "bamazon_db"
   });
 
-
   function displayAllData(){
       connection.query("SELECT * FROM bamazon_db.products;", function(err, res) {
           if(err) throw err;
@@ -25,18 +24,17 @@ var connection = mysql.createConnection({
       })
   }
 
-  function updateDataBase(id, quanitity){
-      connection.query("UPDATE ? FROM bamazon_db.products WHERE ?", {
-          stock_quantity: quanitity,
-          item_id: id
-      }), function(err, res) {
-          console.table(res);
-      }
+  function updateDataBase(id, quantity){
+      var query = `UPDATE bamazon_db.products SET stock_quantity = stock_quantity - ${quantity}  WHERE item_id = ${id};`
+      connection.query(query, function(err, res) {
+          //console.table(res);
+          displayAllData();
+      })
   }
   function getItemByID(id){
       connection.query("SELECT product_name FROM bamazon_db.products WHERE item_id = " + id, function(err, res) {
           if(err) throw err;
-          console.log(res)
+         // console.log(res)
           console.log(`You chose ${res[0].product_name}`);
           return res.product_name;
       })
@@ -45,7 +43,6 @@ var connection = mysql.createConnection({
   //displayAllData();
   //askCustomerID();
   function askCustomerID() {
-      
       inquirer.prompt([
           {
               type: "input",
@@ -66,11 +63,11 @@ var connection = mysql.createConnection({
           getItemByID(id);
         //   console.log(`You want to buy ${res.product_name}`);
          askCustomerQuanitiy(id);
-
+        //displayAllData();
       })
   }
 
-  function askCustomerQuanitiy(quantity){
+  function askCustomerQuanitiy(id){
 
       inquirer.prompt([
           {
@@ -87,7 +84,9 @@ var connection = mysql.createConnection({
           }
       ]).then((res) => {
           //log how many you bought
+          console.log(`You bought ${res.quantity}`);
           //update the db with new quanitity
+          updateDataBase(id, res.quantity)
       })
   }
 
