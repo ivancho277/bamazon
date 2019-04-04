@@ -20,7 +20,7 @@ function displayAllData() {
     connection.query("SELECT * FROM bamazon_db.products;", function (err, res) {
         if (err) throw err;
         console.table(res);
-        askCustomerID();
+      //  askCustomerID();
     })
 }
 
@@ -28,7 +28,7 @@ function updateDataBase(id, quantity) {
     var query = `UPDATE bamazon_db.products SET stock_quantity = stock_quantity - ${quantity}  WHERE item_id = ${id};`
     connection.query(query, function (err, res) {
         //console.table(res);
-        displayAllData();
+        displayAllData();       
     })
 }
 
@@ -59,7 +59,7 @@ function askCustomerID() {
         ])
         .then((res) => {
             var id = res.id;
-            console.log(res.id)
+           // console.log(res.id)
             getItemByID(id);
             //   console.log(`You want to buy ${res.product_name}`);
             askCustomerQuanitiy(id);
@@ -85,13 +85,37 @@ function askCustomerQuanitiy(id) {
         console.log(`You bought ${res.quantity}`);
         //update the db with new quanitity
         updateDataBase(id, res.quantity)
+        setTimeout((() => {
+            askToPlayAgain();
+        }),300)
+    
     })
 }
 
+function askToPlayAgain(){
+    inquirer.prompt([
+        {
+            type: "confirm",
+            name: "buyAgain",
+            message: "Would you like to buy something else?"
+        }
+    ]).then((res) => {
+        if(res.buyAgain){
+            runBamazonCustomer()
+        }
+        else{
+            console.log("Thank you for shopping!")
+        }
+    })
+
+}
+
 function runBamazonCustomer() {
+
     displayAllData();
-    
-
-
+    setTimeout((() => {
+    askCustomerID();
+    }), 300)
+  
 }
 runBamazonCustomer()
